@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Pattern Matching</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Pattern Matching</h1>
+
+
+
+<p>Flexible manipulation (extraction, summarization, diagnostics) of specific nodes from <code>mcmc.list</code> objects is one of the primary features of ‘postpack’. This flexibility is provided through the use of <strong>regular expressions</strong>. Regular expressions are a method of matching character strings using patterns. As an example, suppose you wished to extract all of the <code>b0</code> parameters from the <code>cjs</code> object, which include <code>b0[1]</code>, <code>b0[2]</code>, <code>b0[3]</code>, <code>b0[4]</code>, and <code>b0[5]</code>. Without regular expressions, you would have to somehow state explictly that you want to extract each of these (perhaps using <code>paste0(&quot;b0[&quot;, 1:5, &quot;]&quot;)</code>).</p>
+<p>However, with regular expressions, you simply need to find a common feature of the strings you wish to match, and create a pattern that will exclude all strings that do not have that common feature. This capability greatly increases the ease and flexibility of performing tasks on specific nodes. You will need to learn some very basic regular expression syntax to get it to work properly.</p>
+<p>Here is a very basic example. Begin by loading ‘postpack’ and the example <code>mcmc.list</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(postpack)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">data</span>(cjs)</span></code></pre></div>
+<p>Next, obtain a basic posterior summary for all nodes that contain the letter <code>&quot;B&quot;</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">post_summ</span>(cjs, <span class="dt">params =</span> <span class="st">&quot;B&quot;</span>, <span class="dt">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##          B0 sig_B0    B1 sig_B1
+## mean  1.590  0.844 0.415  0.243
+## sd    0.491  0.619 0.213  0.262
+## 50%   1.569  0.682 0.397  0.178
+## 2.5%  0.551  0.277 0.062  0.006
+## 97.5% 2.588  2.439 0.864  0.821</code></pre>
+<p>Because all of the node names contain a <code>&quot;B&quot;</code>, they are matched and returned. So if you only wanted <code>sig_B0</code> and <code>sig_B1</code>, you could pass <code>params = &quot;sig&quot;</code> as an argument to the ‘postpack’ function in question, to perform the action for only nodes that contain <code>&quot;sig&quot;</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">diag_plots</span>(cjs, <span class="dt">params =</span> <span class="st">&quot;sig&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div id="match_params" class="section level2">
+<h2><code>match_params()</code></h2>
+<p>Pattern matching is driven by the <code>match_params()</code> function (which is essentially a wrapper for <code>stringr::str_detect()</code>). Every function in ‘postpack’ that uses a <code>param</code> or <code>params</code> argument passes that argument to <code>match_params()</code> early on their calculations, so understanding the way it works is important.</p>
+<p>Suppose you want to summarize the random slope and intercept for year 2 (named <code>&quot;b0[2]&quot;</code> and <code>&quot;b1[2]&quot;</code> in the output). Use <code>match_params()</code> to help you get the right regular expression code by checking what will be matched when you try to subset your output:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">match_params</span>(cjs, <span class="st">&quot;2&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;b0[2]&quot;    &quot;b1[2]&quot;    &quot;SIG[2,1]&quot; &quot;SIG[1,2]&quot; &quot;SIG[2,2]&quot; &quot;p[2]&quot;</code></pre>
+<p>All nodes with a <code>&quot;2&quot;</code> would be returned. You could exclude the <code>&quot;SIG&quot;</code> elements using:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">match_params</span>(cjs, <span class="st">&quot;[2]&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;b0[2]&quot; &quot;b1[2]&quot; &quot;p[2]&quot;</code></pre>
+</div>
+<div id="automatic-escape-of-brackets" class="section level2">
+<h2>Automatic Escape of Brackets</h2>
+<p>Users already familiar with regular expressions will see the square brackets (<code>&quot;[&quot;</code> and <code>&quot;]&quot;</code>) as special characters and may be confused why this works. When using regular expressions, normally <code>&quot;[&quot;</code> and <code>&quot;]&quot;</code> have a special meaning and users would need to escape them (i.e., <code>&quot;\\[&quot;</code> and <code>&quot;\\]&quot;</code>) to allow them to be matched as plain text. However, because <code>&quot;[&quot;</code> and <code>&quot;]&quot;</code> are frequently part of node names and users will wish to use them in pattern matching more frequently than as special characters, ‘postpack’ automatically escapes <code>&quot;[&quot;</code> and <code>&quot;]&quot;</code> if they are not already escaped.</p>
+<p>If you do not wish to automatically escape <code>&quot;[&quot;</code> and <code>&quot;]&quot;</code> to allow a regular expression where brackets serve as special characters like <code>&quot;[:alnum:]&quot;</code>, you <strong>must</strong> include the <code>auto_escape = FALSE</code> argument:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">match_params</span>(cjs, <span class="st">&quot;[:alnum:]&quot;</span>, <span class="dt">auto_escape =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>##  [1] &quot;B0&quot;       &quot;sig_B0&quot;   &quot;B1&quot;       &quot;sig_B1&quot;   &quot;b0[1]&quot;    &quot;b0[2]&quot;   
+##  [7] &quot;b0[3]&quot;    &quot;b0[4]&quot;    &quot;b0[5]&quot;    &quot;b1[1]&quot;    &quot;b1[2]&quot;    &quot;b1[3]&quot;   
+## [13] &quot;b1[4]&quot;    &quot;b1[5]&quot;    &quot;SIG[1,1]&quot; &quot;SIG[2,1]&quot; &quot;SIG[1,2]&quot; &quot;SIG[2,2]&quot;
+## [19] &quot;p[2]&quot;     &quot;p[3]&quot;     &quot;p[4]&quot;</code></pre>
+<p>If you then also wish to match a <code>&quot;[&quot;</code> as plain text in the same regular expression, you can explicitly escape it:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">match_params</span>(cjs, <span class="st">&quot;[:alnum:]</span><span class="ch">\\</span><span class="st">[&quot;</span>, <span class="dt">auto_escape =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>##  [1] &quot;b0[1]&quot;    &quot;b0[2]&quot;    &quot;b0[3]&quot;    &quot;b0[4]&quot;    &quot;b0[5]&quot;    &quot;b1[1]&quot;   
+##  [7] &quot;b1[2]&quot;    &quot;b1[3]&quot;    &quot;b1[4]&quot;    &quot;b1[5]&quot;    &quot;SIG[1,1]&quot; &quot;SIG[2,1]&quot;
+## [13] &quot;SIG[1,2]&quot; &quot;SIG[2,2]&quot; &quot;p[2]&quot;     &quot;p[3]&quot;     &quot;p[4]&quot;</code></pre>
+<p>All functions that accept either <code>param</code> or <code>params</code> argument also accept the <code>auto_escape</code> argument, and it is always <code>TRUE</code> by default. For what it is worth, I have only rarely used this feature, but chose to include it to allow complete regular expression capabilities.</p>
+</div>
+<div id="wild-cards" class="section level2">
+<h2>Wild Cards</h2>
+<p>With that out of the way, now further refine the regular expression to exclude the <code>p[2]</code> node from the output:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">match_params</span>(cjs, <span class="st">&quot;b.[2]&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;b0[2]&quot; &quot;b1[2]&quot;</code></pre>
+<p>The <code>&quot;.&quot;</code> serves as a wild card, which says match any one character. If you would have supplied simply <code>&quot;b[2]&quot;</code>, you would get an error:</p>
+<pre><code>## Error: 
+##   Supplied value(s) of params (&quot;b[2]&quot;) did not have any matches in the nodes stored in post.
+##   All elements of params must have at least one match.
+##   The base names of all monitored nodes are:
+##     &quot;B0&quot;, &quot;sig_B0&quot;, &quot;B1&quot;, &quot;sig_B1&quot;, 
+##     &quot;b0&quot;, &quot;b1&quot;, &quot;SIG&quot;, and &quot;p&quot;</code></pre>
+<p>Which is what will happen when any element supplied to <code>params</code> does not match one of the node names stored in the output. The wild card is necessary to specify that some character (here a <code>&quot;0&quot;</code> or a <code>&quot;1&quot;</code>) falls between the <code>&quot;b&quot;</code> and the <code>&quot;[&quot;</code> characters in your desired match. You can now pass <code>&quot;b.[2]&quot;</code> to <code>post_summ()</code> with confidence knowing that only the two coefficients you want will be returned:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">post_summ</span>(cjs, <span class="st">&quot;b.[2]&quot;</span>, <span class="dt">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##       b0[2] b1[2]
+## mean  2.319 0.423
+## sd    0.356 0.218
+## 50%   2.278 0.403
+## 2.5%  1.784 0.046
+## 97.5% 3.163 0.916</code></pre>
+<p><strong>NOTE</strong>: Because <code>&quot;.&quot;</code> is a special character (a wild card), if you wish to match it as plain text, you <strong>must</strong> escape it. For example if you have both nodes <code>&quot;a.b&quot;</code> and <code>&quot;a_b&quot;</code> in your <code>mcmc.list</code> object <code>x</code>, running <code>match_params(x, &quot;a.b&quot;)</code> will match both <code>&quot;a.b&quot;</code> and <code>&quot;a_b&quot;</code>. If you want only <code>&quot;a.b&quot;</code>, you must run <code>match_params(x, &quot;a\\.b&quot;)</code></p>
+</div>
+<div id="anchors" class="section level2">
+<h2>Anchors</h2>
+<p>As another example, instead of accessing all nodes that contain <code>&quot;B&quot;</code> in their name, suppose you wish to only extract those that contain <code>&quot;B&quot;</code> as the first character. You can force your match to start with certain patterns using the <code>&quot;^&quot;</code> symbol:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">match_params</span>(cjs, <span class="st">&quot;^B&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;B0&quot; &quot;B1&quot;</code></pre>
+<p>Likewise, you could extract only nodes that end with <code>&quot;0&quot;</code> using the <code>&quot;$&quot;</code> symbol:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">match_params</span>(cjs, <span class="st">&quot;0$&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;B0&quot;     &quot;sig_B0&quot;</code></pre>
+<p>Note that no elements of <code>&quot;b0&quot;</code> are returned, because these nodes end with <code>&quot;]&quot;</code> (e.g., <code>&quot;b0[1]&quot;</code>).</p>
+</div>
+<div id="repetition" class="section level2">
+<h2>Repetition</h2>
+<p>You can repeat a wild card or some other character one or more times using the <code>&quot;+&quot;</code> symbol:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">match_params</span>(cjs, <span class="st">&quot;^s.+0$&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;sig_B0&quot;</code></pre>
+<p>Which forces the match to start with an <code>&quot;s&quot;</code>, end with a <code>&quot;0&quot;</code>, and have anything in between.</p>
+</div>
+<div id="more-resources" class="section level2">
+<h2>More resources</h2>
+<p>Because <code>match_params()</code> is a wrapper for <code>stringr::str_detect()</code>, most everything that works there will also with with ‘postpack’. There is a comprehensive description of all regular expression syntax accepted by ‘stringr’ <a href="https://stringr.tidyverse.org/articles/regular-expressions.html">here</a> (also accessible in R using <code>vignette(&quot;regular-expressions&quot;, package = &quot;stringr&quot;)</code>).</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

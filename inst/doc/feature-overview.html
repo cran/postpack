@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Feature Overview</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Feature Overview</h1>
+
+
+
+<p>This vignette is intended to get you up and running using ‘postpack’ to process your MCMC output by showcasing some of the main features.</p>
+<div id="prequisites" class="section level1">
+<h1>Prequisites</h1>
+<p>‘postpack’ requires that your MCMC samples are stored in <code>mcmc.list</code> objects (class and methods supplied by the ‘coda’ package). Some MCMC interfaces produce this output by default (<code>rjags::coda.samples()</code>, <code>jagsUI::jags.basic()</code>, and <code>jagsUI::jags()</code> <code>$samples</code>). Others produce output that can be fairly easily converted to this format (<code>R2WinBUGS::bugs()</code>, <code>R2OpenBUGS::bugs()</code>, <code>rstan::stan()</code>, <code>nimble::runMCMC()</code>).</p>
+<p>If your samples are not already in an <code>mcmc.list</code> object, check out <code>?postpack::post_convert</code> to see how you may be able to reformat them.</p>
+<p>This vignette uses an example <code>mcmc.list</code> object called <code>cjs</code> to illustrate the main features of ‘postpack’, see <code>?cjs</code> or <code>vignette(&quot;example-mcmclists&quot;)</code> for more details. To follow along, load it and ‘postpack’ into your session:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(postpack)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">data</span>(cjs)</span></code></pre></div>
+</div>
+<div id="query-mcmc-attributes" class="section level1">
+<h1>Query MCMC Attributes</h1>
+<p>You can return the dimensions of the MCMC run using:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">post_dim</span>(cjs)</span></code></pre></div>
+<pre><code>##      burn post_burn      thin    chains     saved    params 
+##     11000     50000       200         2       500        21</code></pre>
+<p>These elements should be self-explanatory, but see <code>?post_dim</code> for details. You can extract one of these dimensional elements quickly by specifying the <code>types</code> argument, e.g., notice that there are 21 saved nodes by running <code>post_dim(cjs, types = &quot;params&quot;)</code>.</p>
+<p>The parameter names of these nodes will be crucial in subsetting them, so you should be able to check them out quickly at any time. This is the purpose of the <code>get_params()</code> function:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">get_params</span>(cjs)</span></code></pre></div>
+<pre><code>## [1] &quot;B0&quot;     &quot;sig_B0&quot; &quot;B1&quot;     &quot;sig_B1&quot; &quot;b0&quot;     &quot;b1&quot;     &quot;SIG&quot;    &quot;p&quot;</code></pre>
+<p>This shows you the base node names that were monitored during model fitting. If you wish to see the element indices associated with each node as well, supply the <code>type = &quot;base_index&quot;</code> argument:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">get_params</span>(cjs, <span class="dt">type =</span> <span class="st">&quot;base_index&quot;</span>)</span></code></pre></div>
+<pre><code>##  [1] &quot;B0&quot;       &quot;sig_B0&quot;   &quot;B1&quot;       &quot;sig_B1&quot;   &quot;b0[1]&quot;    &quot;b0[2]&quot;   
+##  [7] &quot;b0[3]&quot;    &quot;b0[4]&quot;    &quot;b0[5]&quot;    &quot;b1[1]&quot;    &quot;b1[2]&quot;    &quot;b1[3]&quot;   
+## [13] &quot;b1[4]&quot;    &quot;b1[5]&quot;    &quot;SIG[1,1]&quot; &quot;SIG[2,1]&quot; &quot;SIG[1,2]&quot; &quot;SIG[2,2]&quot;
+## [19] &quot;p[2]&quot;     &quot;p[3]&quot;     &quot;p[4]&quot;</code></pre>
+</div>
+<div id="extracting-posterior-summaries" class="section level1">
+<h1>Extracting Posterior Summaries</h1>
+<p>A cornerstone of ‘postpack’ is the <code>post_summ()</code> function, which is for extracting posterior summaries for particular nodes of interest.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">post_summ</span>(cjs, <span class="dt">params =</span> <span class="kw">c</span>(<span class="st">&quot;sig_B0&quot;</span>, <span class="st">&quot;sig_B1&quot;</span>))</span></code></pre></div>
+<pre><code>##          sig_B0      sig_B1
+## mean  0.8440230 0.243479572
+## sd    0.6187583 0.262166509
+## 50%   0.6820298 0.178356796
+## 2.5%  0.2766108 0.005735707
+## 97.5% 2.4394721 0.820640886</code></pre>
+<p>The output is in a simple, easily subsettable matrix format (unlike <code>coda::summary.mcmc()</code>), which makes plotting these summaries more straight-forward. Presented by default are posterior mean, standard deviation, and the 50%, 2.5%, and 97.5% quantiles. You can report other quantiles using <code>probs</code> if desired and round them using <code>digits</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">post_summ</span>(cjs, <span class="kw">c</span>(<span class="st">&quot;sig_B0&quot;</span>, <span class="st">&quot;sig_B1&quot;</span>), <span class="dt">digits =</span> <span class="dv">3</span>, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.975</span>))</span></code></pre></div>
+<pre><code>##       sig_B0 sig_B1
+## mean   0.844  0.243
+## sd     0.619  0.262
+## 2.5%   0.277  0.006
+## 25%    0.490  0.081
+## 50%    0.682  0.178
+## 75%    1.035  0.319
+## 97.5%  2.439  0.821</code></pre>
+<p>One of the key features is that the <code>params</code> argument selects nodes based on regular expressions, so all elements of the <code>&quot;b0&quot;</code> node can be summarized with:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">post_summ</span>(cjs, <span class="st">&quot;b0&quot;</span>)</span></code></pre></div>
+<pre><code>##           b0[1]     b0[2]    b0[3]     b0[4]     b0[5]
+## mean  1.3753033 2.3192679 1.751486 1.5200421 1.0824184
+## sd    0.2067011 0.3564031 0.238889 0.2032504 0.2077227
+## 50%   1.3674581 2.2779459 1.728931 1.5075479 1.0754654
+## 2.5%  0.9614656 1.7836702 1.324638 1.1597562 0.6748646
+## 97.5% 1.8053107 3.1633955 2.287703 1.9605019 1.5194312</code></pre>
+<p>Several ‘postpack’ functions accept the <code>params</code> argument (always in the second argument if it is present) to specify queries from the <code>mcmc.list</code> passed to <code>post</code>, so learning to use it is key. More information on using regular expressions to extract particular nodes can be found in <code>vignette(&quot;pattern-matching&quot;)</code>.</p>
+<p>Estimates of the uncertainty associated with MCMC sampling in the mean and quantiles can be obtained using the <code>mcse</code> argument (which calls <code>mcmcse::mcse()</code> and <code>mcmcse::mcse.q()</code>):</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">post_summ</span>(cjs, <span class="st">&quot;^B&quot;</span>, <span class="dt">mcse =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>##                    B0          B1
+## mean       1.59031238 0.415103100
+## sd         0.49113008 0.212836348
+## 50%        1.56878458 0.397436350
+## 2.5%       0.55133227 0.061825217
+## 97.5%      2.58753866 0.863829917
+## mcse_mean  0.01359695 0.011192343
+## mcse_50%   0.01724213 0.009013355
+## mcse_2.5%  0.18139264 0.025923187
+## mcse_97.5% 0.06398231 0.042813775</code></pre>
+<p>Summaries for each chain can be obtained using the <code>by_chain = TRUE</code> argument:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">post_summ</span>(cjs, <span class="st">&quot;^B&quot;</span>, <span class="dt">by_chain =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## , , chain1
+## 
+##              B0        B1
+## mean  1.5571300 0.4180811
+## sd    0.4614706 0.2401460
+## 50%   1.5502780 0.3988950
+## 2.5%  0.5012706 0.0608274
+## 97.5% 2.5107643 0.8543241
+## 
+## , , chain2
+## 
+##              B0         B1
+## mean  1.6234948 0.41212506
+## sd    0.5178997 0.18191380
+## 50%   1.5922041 0.39674020
+## 2.5%  0.5687639 0.07524337
+## 97.5% 2.6084912 0.87875912</code></pre>
+</div>
+<div id="extracting-mcmc-diagnostics" class="section level1">
+<h1>Extracting MCMC Diagnostics</h1>
+<p>‘postpack’ features two primary ways of diagnosing the convergence/adequate sample behavior of MCMC chains: numerically and visually. Both methods use the <code>params</code> argument to allow users to have control over which nodes get diagnostics.</p>
+<p><code>post_summ()</code> includes two additional arguments for obtaining numerical diagnostics:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">post_summ</span>(cjs, <span class="kw">c</span>(<span class="st">&quot;sig_B0&quot;</span>, <span class="st">&quot;sig_B1&quot;</span>), <span class="dt">neff =</span> <span class="ot">TRUE</span>, <span class="dt">Rhat =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>##            sig_B0       sig_B1
+## mean    0.8440230 2.434796e-01
+## sd      0.6187583 2.621665e-01
+## 50%     0.6820298 1.783568e-01
+## 2.5%    0.2766108 5.735707e-03
+## 97.5%   2.4394721 8.206409e-01
+## Rhat    1.0220000 1.043000e+00
+## neff  500.0000000 4.320000e+02</code></pre>
+<p><code>neff = TRUE</code> triggers a call to <code>coda::effectiveSize()</code> to estimate the number of MCMC samples that are independent and <code>Rhat = TRUE</code> triggers a call to <code>coda::gelman.diag()</code> to calculate the commonly used Rhat convergence diagnostic (numbers near 1 are ideal, greater than 1.1 may be problematic). <code>&quot;Rhat&quot;</code> will always be rounded to three digits, and <code>&quot;neff&quot;</code> will always be rounded to an integer, regardless of the value of the <code>digits</code> argument.</p>
+<p>Viewing the density and trace plot for a parameter is another common way to evaluate algorithm convergence. The <code>diag_plots()</code> function serves this purpose (which, unlike <code>coda:::plot.mcmc()</code>, allows plotting the densities color coded by chain and only for specific nodes):</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">diag_plots</span>(cjs, <span class="dt">params =</span> <span class="st">&quot;SIG&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<p>Options exist to:</p>
+<ul>
+<li>Display the Rhat and effective MCMC samples for each node (the <code>show_diags</code> argument, which accepts value of <code>&quot;always&quot;</code>, <code>&quot;never&quot;</code>, or <code>&quot;if_poor_Rhat&quot;</code> with the last one being the default. See <code>?diag_plots</code> for details).</li>
+<li>Plot the output in a new external device (the <code>ext_device</code> argument).</li>
+<li>Change the size of the graphics device (the <code>dims</code> argument).</li>
+<li>Change the layout of parameters on the device (the <code>layout</code> argument).</li>
+<li>Save the output to a PDF graphics device (the <code>save</code> argument, which then requires that you enter the <code>file</code> argument, which is the file name of the PDF complete with the <code>&quot;.pdf&quot;</code> extension).</li>
+<li>Thin the chains by some percentage (at quasi-evenly spaced intervals) before drawing the trace plot – this can help manage the file size when generating many plots with many samples while still providing much of the same inference as the unthinned output. The argument <code>keep_percent = 0.8</code> is passed to <code>post_thin()</code>, and would discard 20% of the samples prior to trace plotting. This thinning does not affect the density plot visual – all retained samples are plotted there.</li>
+</ul>
+<p>The <code>dims</code> and <code>layout</code> arguments are set to <code>&quot;auto&quot;</code> by default – for adjustment of these settings, see <code>?diag_plots</code>.</p>
+<p>The more chains there are in the <code>mcmc.list</code> object passed to the <code>post</code> argument, the more colors will be displayed.</p>
+</div>
+<div id="extracting-posterior-samples" class="section level1">
+<h1>Extracting Posterior Samples</h1>
+<p>Often you will want to take a subset out of your output while retaining each saved posterior sample, for example, to plot a histogram of the samples or to calculate the posterior of some derived quantity as though it had been included as part of the model code.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>b0_samps =<span class="st"> </span><span class="kw">post_subset</span>(cjs, <span class="st">&quot;b0&quot;</span>)</span></code></pre></div>
+<p>By default, the output will be a <code>mcmc.list</code> which allows it to play nicely with the rest of the ‘postpack’ functions (e.g., <code>get_params(b0_samps)</code>). However, performing plotting or calculation tasks on posterior samples might be easier if they were combined across chains and stored as a matrix (nodes as columns, rows as samples):</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>b0_samps =<span class="st"> </span><span class="kw">post_subset</span>(cjs, <span class="st">&quot;b0&quot;</span>, <span class="dt">matrix =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p>Note that if you wish to retain the chain and iteration number of each posterior sample when converting to a matrix with <code>post_subset()</code>, you can pass the optional logical arguments <code>chains</code> and <code>iters</code> (both are <code>FALSE</code> by default).</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">head</span>(<span class="kw">post_subset</span>(cjs, <span class="st">&quot;b0&quot;</span>, <span class="dt">matrix =</span> <span class="ot">TRUE</span>, <span class="dt">chains =</span> <span class="ot">TRUE</span>, <span class="dt">iters =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
+<pre><code>##      CHAIN  ITER    b0[1]    b0[2]    b0[3]    b0[4]     b0[5]
+## [1,]     1 11200 1.275155 2.632859 1.860819 1.708103 0.8804635
+## [2,]     1 11400 1.308511 2.077802 1.518087 1.198710 0.9843441
+## [3,]     1 11600 1.338846 2.473211 1.358235 1.156759 0.8060235
+## [4,]     1 11800 1.654078 2.703028 1.498338 1.279799 1.0339362
+## [5,]     1 12000 1.118555 2.313318 1.819527 1.189711 0.9702624
+## [6,]     1 12200 1.188926 2.653793 1.633183 1.539144 0.8438322</code></pre>
+<p>In some cases, it may be easier to keep all nodes <strong>except</strong> those matched by <code>params</code>. For this this, you can use <code>post_remove()</code> (if <code>ask = TRUE</code>, you will be prompted to verify that you wish to remove the nodes that were matched – this is the default):</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># check out param names</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="kw">get_params</span>(cjs)</span></code></pre></div>
+<pre><code>## [1] &quot;B0&quot;     &quot;sig_B0&quot; &quot;B1&quot;     &quot;sig_B1&quot; &quot;b0&quot;     &quot;b1&quot;     &quot;SIG&quot;    &quot;p&quot;</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># remove all SIG nodes</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>cjs2 =<span class="st"> </span><span class="kw">post_remove</span>(cjs, <span class="st">&quot;SIG&quot;</span>, <span class="dt">ask =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb27-3"><a href="#cb27-3"></a></span>
+<span id="cb27-4"><a href="#cb27-4"></a><span class="co"># did it work?</span></span>
+<span id="cb27-5"><a href="#cb27-5"></a><span class="kw">get_params</span>(cjs2)</span></code></pre></div>
+<pre><code>## [1] &quot;B0&quot;     &quot;sig_B0&quot; &quot;B1&quot;     &quot;sig_B1&quot; &quot;b0&quot;     &quot;b1&quot;     &quot;p&quot;</code></pre>
+</div>
+<div id="matrixarray-nodes" class="section level1">
+<h1>Matrix/Array Nodes</h1>
+<div id="array_format" class="section level2">
+<h2><code>array_format()</code></h2>
+<p>Notice that the <code>&quot;SIG&quot;</code> node is a matrix (there are two dimensions of element indices in the node names):</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>(<span class="dt">SIG_ests =</span> <span class="kw">post_summ</span>(cjs, <span class="st">&quot;SIG&quot;</span>, <span class="dt">digits =</span> <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>##       SIG[1,1] SIG[2,1] SIG[1,2] SIG[2,2]
+## mean      1.09     0.05     0.05     0.13
+## sd        3.19     0.26     0.26     0.45
+## 50%       0.47     0.02     0.02     0.03
+## 2.5%      0.08    -0.33    -0.33     0.00
+## 97.5%     5.95     0.58     0.58     0.67</code></pre>
+<p>You may want to create a matrix that stores the posterior means (or any other summary statistic) in the same format as they would be found in the model. For this, you can use <code>array_format()</code>:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">array_format</span>(SIG_ests[<span class="st">&quot;mean&quot;</span>,])</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,] 1.09 0.05
+## [2,] 0.05 0.13</code></pre>
+<p>Although this is a basic example, this function becomes more useful for higher dimensional nodes – dimensions between 2 and 10 are currently supported.</p>
+<p><code>array_format()</code> requires a vector of named elements, where the element names contain the correct indices to place them in (e.g., <code>&quot;SIG[1,1]&quot;</code> and <code>&quot;SIG[2,2]&quot;</code>). Based on the indices in the element names, <code>array_format()</code> determines the dimensions of the object in the model and places the elements in the correct location.</p>
+<p><code>array_format()</code> will respect missing values. As an example, suppose the the model did not specify what <code>&quot;SIG[2,1]&quot;</code> should be. In this case, it will not be returned as a tracked node element in the <code>mcmc.list</code> (at least in JAGS). We can simulate this behavior by removing that node from the output, and seeing that <code>array_format()</code> inserts an <code>NA</code> in the proper location:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>cjs2 =<span class="st"> </span><span class="kw">post_remove</span>(cjs, <span class="st">&quot;SIG[2,1]&quot;</span>, <span class="dt">ask =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="kw">array_format</span>(<span class="kw">post_summ</span>(cjs2, <span class="st">&quot;SIG&quot;</span>)[<span class="st">&quot;mean&quot;</span>,])</span></code></pre></div>
+<pre><code>##          [,1]       [,2]
+## [1,] 1.094471 0.04547222
+## [2,]       NA 0.12787612</code></pre>
+</div>
+<div id="vcov_decomp" class="section level2">
+<h2><code>vcov_decomp()</code></h2>
+<p>The <code>&quot;SIG&quot;</code> node represents a variance-covariance matrix in the model. Sometimes it is desirable to decompose this matrix into a vector of standard deviations and a correlation matrix. Rather than perform this calculation on the posterior summary of <code>&quot;SIG&quot;</code>, we can perform it for each posterior sample to obtain a posterior of the correlation matrix. This is the purpose of <code>vcov_decomp()</code>:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>SIG_decomp =<span class="st"> </span><span class="kw">vcov_decomp</span>(cjs, <span class="dt">param =</span> <span class="st">&quot;SIG&quot;</span>)</span></code></pre></div>
+<pre><code>## Decomposing variance-covariance matrix node: SIG (2x2)
+## 
+## </code></pre>
+<p>Note the characteristics of the output obtained:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="kw">class</span>(SIG_decomp)</span></code></pre></div>
+<pre><code>## [1] &quot;mcmc.list&quot;</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="kw">post_dim</span>(cjs) <span class="op">==</span><span class="st"> </span><span class="kw">post_dim</span>(SIG_decomp)</span></code></pre></div>
+<pre><code>##      burn post_burn      thin    chains     saved    params 
+##      TRUE      TRUE      TRUE      TRUE      TRUE     FALSE</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="kw">get_params</span>(SIG_decomp, <span class="dt">type =</span> <span class="st">&quot;base_index&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;sigma[1]&quot; &quot;sigma[2]&quot; &quot;rho[1,1]&quot; &quot;rho[2,1]&quot; &quot;rho[1,2]&quot; &quot;rho[2,2]&quot;</code></pre>
+<p>The nodes <code>&quot;sigma[1]&quot;</code> and <code>&quot;sigma[2]&quot;</code> represent the square root of the diagonal elements <code>&quot;SIG[1,1]&quot;</code> and <code>&quot;SIG[2,2]&quot;</code> (and are thus the same as the <code>&quot;sig_B0&quot;</code> and <code>&quot;sig_B1&quot;</code> nodes stored in <code>cjs</code>), and the <code>&quot;rho&quot;</code> elements represent to correlation matrix – and posterior samples exist now for each. The names used for these newly-created nodes can be changed using the <code>sigma_base_name</code> and <code>rho_base_name</code> arguments.</p>
+<p>You can now build the posterior median correlation matrix:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="kw">array_format</span>(<span class="kw">post_summ</span>(SIG_decomp, <span class="st">&quot;rho&quot;</span>)[<span class="st">&quot;50%&quot;</span>,])</span></code></pre></div>
+<pre><code>##           [,1]      [,2]
+## [1,] 1.0000000 0.2685727
+## [2,] 0.2685727 1.0000000</code></pre>
+<p>When using <code>vcov_decomp()</code>, you are recommended to always keep <code>check = TRUE</code>, which will ensure that the samples are from a valid variance-covariance matrix prior to performing the calculation. Setting <code>invert = TRUE</code> will take the inverse of the matrix from each posterior sample prior to performing the calculations (e.g., if you had monitored a precision matrix rather than a covariance matrix).</p>
+</div>
+</div>
+<div id="manipulate-samples" class="section level1">
+<h1>Manipulate Samples</h1>
+<div id="post_thin" class="section level2">
+<h2><code>post_thin()</code></h2>
+<p>If your downstream analyses of the posterior samples require many calculations, then it may be advantageous to develop the code with a smaller but otherwise identical version of the posterior output before unleashing them on the full output. You can thin the chains at quasi-evenly spaced intervals using <code>post_thin()</code>:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="kw">post_thin</span>(cjs, <span class="dt">keep_percent =</span> <span class="fl">0.25</span>)</span></code></pre></div>
+<p>Which would retain 25% of the samples from each chain, and return the result as an <code>mcmc.list</code> object. You may instead use the <code>keep_iters</code> argument to specify the number of iterations you wish to keep per chain.</p>
+</div>
+<div id="post_bind" class="section level2">
+<h2><code>post_bind()</code></h2>
+<p>It may be desirable to combine posterior samples from the same MCMC run together in a single object. This case may arise when calculating derived quantities, and for organizational purposes you want to have them in one object as opposed to two. The two objects must have the same number of chains and saved iterations, and should be calculated from the same model run.</p>
+<div id="two-mcmc.lists" class="section level3">
+<h3>Two <code>mcmc.list</code>s</h3>
+<p>The derived quantities stored in <code>SIG_decomp</code> from above are stored as an <code>mcmc.list</code> object and were calculated from the same model using consistent rules, so have the same dimensions. This makes it easy to use:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>cjs =<span class="st"> </span><span class="kw">post_bind</span>(<span class="dt">post1 =</span> cjs, <span class="dt">post2 =</span> SIG_decomp)</span></code></pre></div>
+<p>and note that you have the new calculated nodes in you main object:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="kw">get_params</span>(cjs)</span></code></pre></div>
+<pre><code>##  [1] &quot;B0&quot;     &quot;sig_B0&quot; &quot;B1&quot;     &quot;sig_B1&quot; &quot;b0&quot;     &quot;b1&quot;     &quot;SIG&quot;    &quot;p&quot;     
+##  [9] &quot;sigma&quot;  &quot;rho&quot;</code></pre>
+<p>You can now quickly verify that <code>&quot;sig_B0&quot;</code> and <code>&quot;sig_B1&quot;</code> are the same as <code>&quot;sigma[1]&quot;</code> and <code>&quot;sigma[2]&quot;</code>, respectively:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a><span class="kw">post_summ</span>(cjs, <span class="st">&quot;sig&quot;</span>)</span></code></pre></div>
+<pre><code>##          sig_B0      sig_B1  sigma[1]    sigma[2]
+## mean  0.8440230 0.243479572 0.8440230 0.243479572
+## sd    0.6187583 0.262166509 0.6187583 0.262166509
+## 50%   0.6820298 0.178356796 0.6820298 0.178356796
+## 2.5%  0.2766108 0.005735707 0.2766108 0.005735707
+## 97.5% 2.4394721 0.820640886 2.4394721 0.820640886</code></pre>
+</div>
+<div id="one-mcmc.list-and-one-matrix" class="section level3">
+<h3>One <code>mcmc.list</code> and one <code>matrix</code></h3>
+<p>Suppose instead that your derived quantities are stored as a matrix: iterations along the rows and quantities along the columns. Binding this to an <code>mcmc.list</code> object involves:</p>
+<p>1.) Obtaining the matrix of the derived quantity(ies),</p>
+<p>2.) Deciding on a name for each of your quantities, and</p>
+<p>3.) Binding the derived list to the main list.</p>
+<p>For step (1), generate such a matrix of derived quantities now, representing the inverse logit transformation of each of the <code>&quot;b0&quot;</code> elements:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a><span class="co"># extract the raw samples from cjs in matrix form</span></span>
+<span id="cb51-2"><a href="#cb51-2"></a>b0_samps =<span class="st"> </span><span class="kw">post_subset</span>(cjs, <span class="st">&quot;b0&quot;</span>, <span class="dt">matrix =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb51-3"><a href="#cb51-3"></a></span>
+<span id="cb51-4"><a href="#cb51-4"></a><span class="co"># perform a derived quantity calculation</span></span>
+<span id="cb51-5"><a href="#cb51-5"></a>eb0_samps =<span class="st"> </span><span class="kw">exp</span>(b0_samps)<span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(b0_samps))</span></code></pre></div>
+<p>Now you have a derived quantity, so for step (2) change the names that each quantity will be stored as:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a><span class="kw">colnames</span>(eb0_samps) =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;eb0[&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="st">&quot;]&quot;</span>)</span></code></pre></div>
+<p>Finally, for step (3) combine the samples using <code>post_bind()</code>:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>cjs =<span class="st"> </span><span class="kw">post_bind</span>(<span class="dt">post1 =</span> cjs, <span class="dt">post2 =</span> eb0_samps)</span></code></pre></div>
+<p>If the two objects contain duplicate node names, the values from the object passed to the <code>post2</code> argument of <code>post_bind()</code> will have the suffix supplied under the argument <code>dup_id</code> (<code>&quot;_p2&quot;</code> by default), and a warning will be returned.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
